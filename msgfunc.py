@@ -29,7 +29,7 @@ def redditfetch(msg):
         if r.status_code == "404" or "error" in r.text:
             print ("Status code: " + str(r.status_code))
             print (r.text)
-            outtext = ["No results found, or 404 error.", "Double check the formatting of your request. Try !reddit -help"]
+            outtext = ["Error: " + str(r.text), "Maybe check the formatting of your request. Try !reddit -help"]
             return outtext
 
         p = json.loads(r.text)
