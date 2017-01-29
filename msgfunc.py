@@ -8,7 +8,7 @@ import requests
 import random
 
 botdata = json.load(open('botinfo.json', 'r'))
-headers = {'User-Agent': botinfo['User-Agent']}
+headers = {'User-Agent': botdata['User-Agent']}
 
 def redditfetch(msg):
     print ("Fetching data from Reddit...")
