@@ -55,6 +55,7 @@ def helpmsg():
         "Here are the current commands you can use that I will respond to:",
         "!help will trigger this help message.",
         "!reddit will return a list of reddit posts, use !reddit -help for more info.",
+        "!roll <num> will roll a <num>-sided die",
         "!name and !location are both stupid self-referencing commands for this bot."
     ]
     return helpmsg
