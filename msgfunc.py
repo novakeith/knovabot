@@ -7,6 +7,9 @@ import asyncio
 import requests
 import random
 
+botdata = json.load(open('botinfo.json', 'r'))
+headers = {'User-Agent': botinfo['User-Agent']}
+
 def redditfetch(msg):
     print ("Fetching data from Reddit...")
     p = msg.split(" ")
@@ -23,7 +26,7 @@ def redditfetch(msg):
 
     if len(p)==4 and len(p[1]) > 0 and len(p[2]) > 0 and p[1] != "-help":
 
-        r = requests.get('https://www.reddit.com/r/'+p[1]+'/'+p[2]+'/.json?t=day&limit='+str(numitems))
+        r = requests.get('https://www.reddit.com/r/'+p[1]+'/'+p[2]+'/.json?t=day&limit='+str(numitems), headers=headers)
         print ("Trying this URL: " + 'https://www.reddit.com/r/'+p[1]+'/'+p[2]+'/.json?t=day&limit='+str(numitems))
 
         if r.status_code == "404" or "error" in r.text:
