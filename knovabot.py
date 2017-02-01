@@ -7,6 +7,7 @@ import discord
 import asyncio
 import json
 import datetime
+import atexit
 from msgfunc import redditfetch, helpmsg, roll
 
 client = discord.Client()
@@ -24,21 +25,26 @@ async def on_message(message):
         return
 
     if message.content.startswith('!help'):
+        print ("Received !help command")
         for h in helpmsg():
             await client.send_message(message.channel, h)
 
     elif message.content.startswith('!location'):
+        print("Received !location command")
         await client.send_message(message.channel, 'My location is '+str(botdata['location']))
 
     elif message.content.startswith('!name'):
+        print("Received !name command")
         await client.send_message(message.channel, 'My name is '+str(client.user.name)+', but you can call me '+str(botdata['botname']))
 
     elif message.content.startswith('!reddit'):
+        print("Received !reddit command")
         rfetch = redditfetch(message.content)
         for r in rfetch:
             await client.send_message(message.channel, r)
 
     elif message.content.startswith('!roll'):
+        print("Received !roll command")
         num = roll(message.content)
         if num > 0:
             await client.send_message(message.channel, "You rolled a " + str(num))
@@ -51,6 +57,9 @@ async def on_message(message):
                 print (str(client.user.name) + " was mentioned, responding to " + str(message.author))
                 await client.send_message(message.channel, 'Hi ' + str(message.author.mention) + '! I am awake and listening, use !help for more info.')
 
+
+# this next part is pretty sinister, it reposts a comment if a user deletes it
+# you may want to disable this
 @client.event
 async def on_message_delete(message):
     print(message.author.name + " deleted a message, asking if users want to have it reposted.")
@@ -64,4 +73,12 @@ async def on_message_delete(message):
                     "REPOSTING: [originally posted " + message.timestamp.strftime("%x %X %Z") + ", by " + message.author.name + "]: " + message.content)
 
 
+# the actual process that runs the bot. pulls the token from botinfo.json, so place your token there
 client.run(botdata['token'])
+
+
+# what to do if the program exits?
+@atexit.register
+def quitbot():
+    print ("Bot was terminated for an unknown reason.")
+
